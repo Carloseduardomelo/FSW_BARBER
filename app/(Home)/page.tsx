@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import Header from "../_components/Header";
 import { ptBR } from "date-fns/locale";
-import { Input } from "../_components/ui/input";
+import  Search  from "./_conponents/Search"
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
         </p>
       </div>
       <div className="px-5">
-        <Input type="email" placeholder="Busque seu Coll" />
+        <Search />
       </div>
     </div>
   );
