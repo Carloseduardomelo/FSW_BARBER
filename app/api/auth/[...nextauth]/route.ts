@@ -8,8 +8,8 @@ const handler = NextAuth({
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
     GoogleProvider({
-      clientId: "",
-      clientSecret: "",
+      clientId: process.env.GGOGLE_CLIENTE_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENTE_SECRET as string,
     }),
   ],
 });
