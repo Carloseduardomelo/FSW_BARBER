@@ -9,7 +9,7 @@ import { Card, CardContent } from "./ui/card"
         <CardContent className="px-5 pb-0 flex justify-between">
           <div className="flex flex-col py-5">
   
-              <Badge className="bg-[#221C3D] text-primary hover:bg-[#221C3D] text-primary mb-3">
+              <Badge className="bg-[#221C3D] text-primary hover:bg-[#221C3D] text-primary mb-3 w-fit">
                 confirmado
               </Badge>
               <h2 className="font-bold mb-2">Corte de cabelo</h2>

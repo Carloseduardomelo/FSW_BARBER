@@ -8,7 +8,7 @@ import { db } from "../_lib/prisma";
 import { BarbershopItem } from "./_conponents/Barbershop_item";
 import Footer from "../_components/Footer";
 
-export default async function Home() {
+const  Home = async () => {
 
   const Barbershop = await db.barbershop.findMany({})
 
@@ -49,3 +49,6 @@ export default async function Home() {
     </div>
   ); 
 }
+
+
+export default Home
