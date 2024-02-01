@@ -8,7 +8,7 @@ interface serveProps {
 }
 const ServerItem = ({ services }: serveProps) => {
   return (
-    <Card>
+    <Card className="w-full">
       <CardContent className="flex items-center p-2 gap-3">
         <Image
           src={services.imageUrl}
