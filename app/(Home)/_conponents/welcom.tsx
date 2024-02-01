@@ -1,5 +1,6 @@
 "use client";
 
+import { db } from "@/app/_lib/prisma";
 import { format } from "date-fns/format";
 import { ptBR } from "date-fns/locale";
 import { signIn, useSession } from "next-auth/react";
