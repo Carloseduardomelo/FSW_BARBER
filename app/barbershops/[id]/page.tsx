@@ -1,9 +1,7 @@
-import { Button } from "@/app/_components/ui/button";
 import { db } from "@/app/_lib/prisma";
-import Image from "next/image";
+import { Key } from "react";
 import BarberShopInfs from "./_components/barberShopInfs";
 import ServerItem from "./_components/serverItem";
-import { Key, useState } from "react";
 
 interface BarbershopPamars {
   params: {

@@ -1,14 +1,11 @@
-import { format } from "date-fns";
 import Header from "../_components/Header";
-import { ptBR } from "date-fns/locale";
 import Search from "./_conponents/Search";
-import Bookin_item from "../_components/Bookin-item";
 
 import { db } from "../_lib/prisma";
 import { BarbershopItem } from "./_conponents/Barbershop_item";
 
-import Welcom from "./_conponents/welcom";
 import Confirmados from "./_conponents/Confirmados";
+import Welcom from "./_conponents/welcom";
 
 const Home = async () => {
   const Barbershop = await db.barbershop.findMany({});
