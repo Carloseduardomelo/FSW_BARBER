@@ -2,6 +2,7 @@ import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Service } from "@prisma/client";
 import Image from "next/image";
+import Agentamento from "./Agentamento";
 
 interface serveProps {
   services: Service;
@@ -34,7 +35,7 @@ const ServerItem = ({ services }: serveProps) => {
                 currency: "BRL",
               }).format(Number(services.price))}
             </p>
-            <Button variant={"secondary"}>Resevar</Button>
+            <Agentamento />
           </div>
         </div>
       </CardContent>
