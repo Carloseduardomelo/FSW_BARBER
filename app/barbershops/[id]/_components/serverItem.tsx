@@ -1,13 +1,15 @@
-import { Button } from "@/app/_components/ui/button";
 import { Card, CardContent } from "@/app/_components/ui/card";
-import { Service } from "@prisma/client";
+import { Barbershop, Service } from "@prisma/client";
 import Image from "next/image";
 import Agentamento from "./Agentamento";
 
 interface serveProps {
   services: Service;
+  barberShopData: Barbershop;
 }
-const ServerItem = ({ services }: serveProps) => {
+const ServerItem = ({ services, barberShopData }: serveProps) => {
+  console.log(services.name);
+
   return (
     <Card className="w-full">
       <CardContent className="flex items-center p-2 gap-3">
@@ -35,7 +37,8 @@ const ServerItem = ({ services }: serveProps) => {
                 currency: "BRL",
               }).format(Number(services.price))}
             </p>
-            <Agentamento />
+
+            <Agentamento serviser={services} barberShopData={barberShopData} />
           </div>
         </div>
       </CardContent>

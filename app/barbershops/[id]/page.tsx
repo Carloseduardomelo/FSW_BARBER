@@ -34,7 +34,11 @@ const BarbershopDetailsPage = async ({ params }: BarbershopPamars) => {
 
       <div className="flex flex-col  items-center justify-center gap-3 px-3">
         {barberShopData.Service.map((item: { id: Key | undefined }) => (
-          <ServerItem key={item.id} services={item} />
+          <ServerItem
+            key={item.id}
+            services={item}
+            barberShopData={barberShopData}
+          />
         ))}
       </div>
     </div>
