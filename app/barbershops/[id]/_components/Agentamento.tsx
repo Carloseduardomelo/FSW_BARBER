@@ -16,7 +16,10 @@ import { useMemo, useState } from "react";
 
 import { Card, CardContent } from "@/app/_components/ui/card";
 import { Barbershop, Service } from "@prisma/client";
-import { addDays, format } from "date-fns";
+import { addDays, format, setHours, setMinutes } from "date-fns";
+import { useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { SaveBookins } from "../_actions/saveBookis";
 import { generateDayTimeList } from "../_helps/horus";
 
 interface NamesProps {
@@ -25,20 +28,49 @@ interface NamesProps {
 }
 
 const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
-  const [date, setDate] = useState<Date>(new Date() || undefined);
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [Horas, setHoras] = useState<string | undefined>();
+
+  const { data } = useSession();
 
   const TimeList = useMemo(() => {
     return date && generateDayTimeList(date);
   }, [date]);
 
   const handleDateClick = (date: Date | undefined) => {
-    date ? setDate(date) : setDate(new Date());
+    setDate(date);
     setHoras(undefined);
   };
 
   const handleHorasClick = (time: string | undefined) => {
     setHoras(time);
+  };
+
+  const handleSaveBookinsSubmit = async () => {
+    try {
+      if (!date || !Horas || !data?.user) {
+        return;
+      }
+
+      const dateHour = Number(Horas.split(":")[0]);
+      const dateMinutes = Number(Horas.split(":")[1]);
+
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
+
+      await SaveBookins({
+        barbershopId: barberShopData.id,
+        serviceId: serviser.id,
+        date: newDate,
+        userId: (data.user as any).id,
+      });
+
+      console.log(newDate);
+
+      setDate(undefined);
+      setHoras(undefined);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -114,7 +146,7 @@ const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-400">Date</p>
                 <p>
-                  {format(date, "dd 'de' MMMM", {
+                  {format(date || new Date(), "dd 'de' MMMM", {
                     locale: ptBR,
                   })}
                 </p>
@@ -132,7 +164,25 @@ const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
         </div>
         <SheetFooter className="px-4 py-4">
           <SheetClose asChild>
-            <Button type="submit">confimar resevar</Button>
+            <Button
+              type="submit"
+              disabled={!date || !Horas}
+              onClick={() => handleSaveBookinsSubmit()}
+            >
+              <p
+                onClick={() =>
+                  toast("Event has been created", {
+                    description: "Sunday, December 03, 2023 at 9:00 AM",
+                    action: {
+                      label: "Undo",
+                      onClick: () => console.log("Undo"),
+                    },
+                  })
+                }
+              >
+                confimar resevar
+              </p>
+            </Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

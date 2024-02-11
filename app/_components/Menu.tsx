@@ -1,25 +1,25 @@
 "use client";
 
-import React from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTrigger,
-  SheetTitle,
-  SheetFooter,
-  SheetClose,
-} from "./ui/sheet";
-import { Button } from "./ui/button";
 import {
   ArrowRightToLine,
   CalendarDays,
   CircleUserIcon,
-  Home,
   MenuIcon,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 
 interface users {
   user: {
@@ -38,13 +38,20 @@ const HandleSairClick = async () => {
 };
 
 const Menu = () => {
-
-  const { data } = useSession()
-
+  const { data } = useSession();
+  const routes = useRouter();
 
   const name = `${data?.user?.name?.split(" ")[0]} ${
     data?.user?.name?.split(" ")[1]
   }`;
+
+  const home = () => {
+    routes.replace("/");
+  };
+
+  const agentamento = () => {
+    routes.replace("/agendados");
+  };
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -95,16 +102,21 @@ const Menu = () => {
             <Button
               variant={"secondary"}
               className="flex gap-3 items-center justify-start bg-transparent border border-solid border-secondary w-full "
+              asChild
             >
-              <Home size={16} />
-              <p>Inicio</p>
+              <Link href={"/"}>
+                <CalendarDays size={16} />
+                Inicio
+              </Link>
             </Button>
+
             <Button
               variant={"secondary"}
               className="flex gap-3 items-center justify-start bg-transparent border border-solid border-secondary w-full "
+              onClick={() => (data?.user ? agentamento() : signIn("google"))}
             >
               <CalendarDays size={16} />
-              <p>Agendamentos</p>
+              Agendamentos
             </Button>
           </SheetClose>
         </SheetFooter>

@@ -1,6 +1,5 @@
 "use client";
 
-import Bookin_item from "@/app/_components/Bookin-item";
 import { useSession } from "next-auth/react";
 
 const Confirmados = () => {
@@ -13,7 +12,6 @@ const Confirmados = () => {
           <h1 className="text-sm uppercase font-bold text-gray-400">
             corde de cabelo
           </h1>
-          <Bookin_item />
         </div>
       ) : (
         ""
