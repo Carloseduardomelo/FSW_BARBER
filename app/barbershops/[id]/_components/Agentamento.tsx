@@ -4,7 +4,6 @@ import { Button } from "@/app/_components/ui/button";
 import { Calendar } from "@/app/_components/ui/calendar";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -12,13 +11,15 @@ import {
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
 import { ptBR } from "date-fns/locale";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Card, CardContent } from "@/app/_components/ui/card";
-import { Barbershop, Service } from "@prisma/client";
+import { Barbershop, Booking, Service } from "@prisma/client";
 import { addDays, format, setHours, setMinutes } from "date-fns";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { getDayBookings } from "../_actions/getDayBookings";
 import { SaveBookins } from "../_actions/saveBookis";
 import { generateDayTimeList } from "../_helps/horus";
 
@@ -30,16 +31,52 @@ interface NamesProps {
 const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [Horas, setHoras] = useState<string | undefined>();
+  const [setIsOpen, setSetIsOpen] = useState(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
 
   const { data } = useSession();
 
-  const TimeList = useMemo(() => {
-    return date && generateDayTimeList(date);
-  }, [date]);
+  const routes = useRouter();
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+    const refreshAvailableHours = async () => {
+      const _dayBookings = await getDayBookings(barberShopData.id, date);
+      setDayBookings(_dayBookings);
+    };
+    refreshAvailableHours();
+  }, [date, barberShopData.id]);
+
+  const timeList = useMemo(() => {
+    if (!date) {
+      return [];
+    }
+
+    return generateDayTimeList(date).filter((time) => {
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+
+      const booking = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
+
+        return bookingHour === timeHour && bookingMinutes === timeMinutes;
+      });
+
+      if (!booking) {
+        return true;
+      }
+
+      return false;
+    });
+  }, [date, dayBookings]);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
     setHoras(undefined);
+    console.log(timeList);
   };
 
   const handleHorasClick = (time: string | undefined) => {
@@ -68,13 +105,24 @@ const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
 
       setDate(undefined);
       setHoras(undefined);
+      setSetIsOpen(false);
+
+      toast("Resevar realizada com sucesso", {
+        description: format(newDate, "'Para' dd 'de' MMM 'as' HH':'mm'.'", {
+          locale: ptBR,
+        }),
+        action: {
+          label: "visualizar",
+          onClick: () => routes.replace("/agendados"),
+        },
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <Sheet>
+    <Sheet open={setIsOpen} onOpenChange={setSetIsOpen}>
       <SheetTrigger asChild>
         <Button variant="secondary">Resevar</Button>
       </SheetTrigger>
@@ -119,7 +167,7 @@ const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
         </div>
         {date && (
           <div className="py-6 px-4 border-y border-solid border-secondary flex gap-4 overflow-x-auto">
-            {TimeList?.map((item) => (
+            {timeList?.map((item) => (
               <Button
                 key={item}
                 variant={"outline"}
@@ -163,27 +211,13 @@ const Agentamento = ({ serviser, barberShopData }: NamesProps) => {
           </Card>
         </div>
         <SheetFooter className="px-4 py-4">
-          <SheetClose asChild>
-            <Button
-              type="submit"
-              disabled={!date || !Horas}
-              onClick={() => handleSaveBookinsSubmit()}
-            >
-              <p
-                onClick={() =>
-                  toast("Event has been created", {
-                    description: "Sunday, December 03, 2023 at 9:00 AM",
-                    action: {
-                      label: "Undo",
-                      onClick: () => console.log("Undo"),
-                    },
-                  })
-                }
-              >
-                confimar resevar
-              </p>
-            </Button>
-          </SheetClose>
+          <Button
+            type="submit"
+            disabled={!date || !Horas}
+            onClick={() => handleSaveBookinsSubmit()}
+          >
+            <p>confimar resevar</p>
+          </Button>
         </SheetFooter>
       </SheetContent>
     </Sheet>
