@@ -30,7 +30,7 @@ const Home = async () => {
           Populares
         </h2>
 
-        <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden md:max-w-[1440px] md:w-[360px}">
           {Barbershop.map((barbershop: any) => (
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
