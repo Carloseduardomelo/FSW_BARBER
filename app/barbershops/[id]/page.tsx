@@ -3,6 +3,16 @@ import { Key } from "react";
 import BarberShopInfs from "./_components/barberShopInfs";
 import ServerItem from "./_components/serverItem";
 
+// Enhanced interface for Service type (avoiding optional chaining later)
+interface Service {
+  id: string; // Assuming IDs are strings
+  name: string;
+  price: number;
+  barbershopid: string;
+  description: string;
+  imageUrl: string;
+}
+
 interface BarbershopPamars {
   params: {
     id?: string;
@@ -28,12 +38,13 @@ const BarbershopDetailsPage = async ({ params }: BarbershopPamars) => {
     return null;
   }
   console.log(barberShopData.name);
+
   return (
     <div>
       <BarberShopInfs barberShopData={barberShopData} />
 
       <div className="flex flex-col  items-center justify-center gap-3 px-3">
-        {barberShopData.Service.map((item: { id: Key}) => (
+        {barberShopData.Service.map((item: Service) => ( // Use the enhanced Service interface
           <ServerItem
             key={item.id}
             services={item}
