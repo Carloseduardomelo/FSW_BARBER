@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma": "npx prisma init"
+    "prismaInit": "npx prisma init"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
