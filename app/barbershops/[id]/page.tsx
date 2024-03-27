@@ -3,9 +3,9 @@ import { Key } from "react";
 import BarberShopInfs from "./_components/barberShopInfs";
 import ServerItem from "./_components/serverItem";
 
-// Enhanced interface for Service type (avoiding optional chaining later)
+// Enhanced interface for Service type
 interface Service {
-  id: string; // Assuming IDs are strings
+  id: string;
   name: string;
   price: number;
   barbershopid: string;
@@ -44,7 +44,7 @@ const BarbershopDetailsPage = async ({ params }: BarbershopPamars) => {
       <BarberShopInfs barberShopData={barberShopData} />
 
       <div className="flex flex-col  items-center justify-center gap-3 px-3">
-        {barberShopData.Service.map((item: Service) => ( // Use the enhanced Service interface
+        {barberShopData.Service && barberShopData.Service.map((item: Service) => ( // Check for Service existence
           <ServerItem
             key={item.id}
             services={item}
