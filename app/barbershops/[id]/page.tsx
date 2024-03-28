@@ -1,5 +1,6 @@
+"use server";
+
 import { db } from "@/app/_lib/prisma";
-import { Key } from "react";
 import BarberShopInfs from "./_components/barberShopInfs";
 import ServerItem from "./_components/serverItem";
 
@@ -37,14 +38,13 @@ const BarbershopDetailsPage = async ({ params }: BarbershopPamars) => {
   if (!barberShopData) {
     return null;
   }
-  console.log(barberShopData.name);
 
   return (
     <div>
       <BarberShopInfs barberShopData={barberShopData} />
 
       <div className="flex flex-col items-center justify-center gap-3 px-3">
-        {barberShopData.Service && barberShopData.Service.map((item: Service) => ( // Check for Service existence
+        {barberShopData.Service.map((item: Service) => ( // Check for Service existence
           <ServerItem
             key={item.id}
             services={item}
