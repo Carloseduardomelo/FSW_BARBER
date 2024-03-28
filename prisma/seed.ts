@@ -1,6 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
+import { db } from "@/app/_lib/prisma";
 
 async function seedDatabase() {
   try {
@@ -101,7 +99,7 @@ async function seedDatabase() {
       const address = addresses[i];
       const imageUrl = images[i];
 
-      const barbershop = await prisma.barbershop.create({
+      const barbershop = await db.barbershop.create({
         data: {
           name,
           address,
@@ -110,7 +108,7 @@ async function seedDatabase() {
       });
 
       for (const service of services) {
-        await prisma.service.create({
+        await db.service.create({
           data: {
             name: service.name,
             descripition: service.description,
@@ -129,7 +127,7 @@ async function seedDatabase() {
     }
 
     // Fechar a conexão com o banco de dados
-    await prisma.$disconnect();
+    await db.$disconnect();
   } catch (error) {
     console.error("Erro ao criar as barbearias:", error);
   }
