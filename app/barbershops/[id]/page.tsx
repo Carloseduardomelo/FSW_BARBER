@@ -1,18 +1,6 @@
-"use server";
-
 import { db } from "@/app/_lib/prisma";
 import BarberShopInfs from "./_components/barberShopInfs";
 import ServerItem from "./_components/serverItem";
-
-// Enhanced interface for Service type
-interface Service {
-  id: string;
-  name: string;
-  price: number;
-  barbershopid: string;
-  description: string;
-  imageUrl: string;
-}
 
 interface BarbershopPamars {
   params: {
@@ -38,13 +26,13 @@ const BarbershopDetailsPage = async ({ params }: BarbershopPamars) => {
   if (!barberShopData) {
     return null;
   }
-
+  console.log(barberShopData.name);
   return (
     <div>
       <BarberShopInfs barberShopData={barberShopData} />
 
-      <div className="flex flex-col items-center justify-center gap-3 px-3">
-        {barberShopData.Service.map((item: Service) => ( // Check for Service existence
+      <div className="flex flex-col  items-center justify-center gap-3 px-3">
+        {barberShopData.Service.map((item) => (
           <ServerItem
             key={item.id}
             services={item}
