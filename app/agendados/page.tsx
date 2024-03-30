@@ -39,8 +39,6 @@ const BookingsPage = async () => {
     }),
   ]);
 
-  console.log(confirmedBookings);
-
   return (
     <>
       <Header />

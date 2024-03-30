@@ -8,7 +8,6 @@ interface serveProps {
   barberShopData: Barbershop;
 }
 const ServerItem = ({ services, barberShopData }: serveProps) => {
-  console.log(services.name);
 
   return (
     <Card className="w-full">
